@@ -1,5 +1,5 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for, flash
-
 from db import execute_query, fetch_one, fetch_all
 from grading_service import grade_question
 
@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 # Required for Flask flash messages
 # Later, move this secret key to a .env file
-app.secret_key = "temporary-dev-secret-key"
+app.secret_key = os.getenv("SECRET_KEY")
 
 
 # --------------------------------------------------
@@ -329,4 +329,4 @@ def grade_results(question_id):
 # This must remain at the VERY BOTTOM of the file.
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)

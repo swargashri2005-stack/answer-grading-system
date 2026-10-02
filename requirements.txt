@@ -1,8 +1,8 @@
-flask
+Flask
 mysql-connector-python
-scikit-learn
+python-dotenv
+numpy
 gensim
 sentence-transformers
-torch
-nltk
-python-dotenv
+scikit-learn
+gunicorn
