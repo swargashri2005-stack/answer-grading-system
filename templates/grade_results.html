@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Grading Results{% endblock %}
+{% block content %}
+    <h1>Grading Results</h1>
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Student</th>
+            <th>Algorithm</th>
+            <th>Similarity</th>
+            <th>Marks</th>
+            <th>Grade</th>
+        </tr>
+        {% for r in results %}
+        <tr>
+            <td>{{ r.roll_number }} - {{ r.name }}</td>
+            <td>{{ r.algorithm }}</td>
+            <td>{{ "%.2f"|format(r.similarity_score * 100) }}%</td>
+            <td>{{ r.marks }}</td>
+            <td>{{ r.letter_grade }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

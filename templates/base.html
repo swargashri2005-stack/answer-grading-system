@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Answer Grading System{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="topbar">
+        <div class="nav-shell">
+            <div class="brand">
+                <span class="brand-mark">GradeSense</span>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('about') }}">About</a>
+                <a href="{{ url_for('add_question') }}">Add Question</a>
+                <a href="{{ url_for('add_student') }}">Add Student</a>
+                <a href="{{ url_for('add_reference_answer') }}">Reference</a>
+                <a href="{{ url_for('add_student_answer') }}">Student Answer</a>
+                <a href="{{ url_for('grade_answers') }}">Run Grading</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-layout">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-container">
+                    {% for message in messages %}
+                        <div class="flash-message">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="panel">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

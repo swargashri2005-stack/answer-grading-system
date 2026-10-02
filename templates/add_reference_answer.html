@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Add Reference Answer{% endblock %}
+{% block content %}
+    <h1>Add Reference Answer</h1>
+    <form method="POST" action="{{ url_for('add_reference_answer') }}">
+        <label>Question:</label><br>
+        <select name="question_id" required>
+            <option value="" disabled selected>-- Select a question --</option>
+            {% for q in questions %}
+                <option value="{{ q.id }}">{{ q.question_text }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label>Reference Answer:</label><br>
+        <textarea name="answer_text" rows="5" cols="50" required></textarea><br><br>
+
+        <button type="submit">Add Reference Answer</button>
+    </form>
+{% endblock %}

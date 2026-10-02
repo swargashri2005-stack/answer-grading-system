@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+<div class="about-page">
+    <div class="about-hero">
+        <div>
+            <div class="about-badge">Intelligent assessment</div>
+            <h1>GradeSense</h1>
+            <p>
+                GradeSense AI is an intelligent academic grading platform designed to evaluate written responses using
+                natural language processing and similarity-based analysis. It helps educators compare student answers with
+                reference solutions and identify performance trends quickly and consistently.
+            </p>
+            <p>
+                The system supports streamlined question management, student record handling, answer submission, and
+                automated scoring using multiple algorithms such as Jaccard, TF-IDF, Word2Vec, and SBERT.
+            </p>
+        </div>
+
+        <div class="about-panel">
+            <h3>Project Objective</h3>
+            <p>To reduce manual grading effort while improving consistency, speed, and analytical insight.</p>
+            <ul>
+                <li>Automated answer comparison</li>
+                <li>Reference-based evaluation</li>
+                <li>Multi-model scoring workflow</li>
+                <li>Teacher-friendly reporting</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <h3>Smart Evaluation</h3>
+            <p>Uses multiple NLP methods to estimate answer similarity and support fairer scoring decisions.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Teacher Workflow</h3>
+            <p>Simple interface for managing questions, students, reference answers, and grading runs.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Scalable Design</h3>
+            <p>Built as a foundation for future enhancements like rubrics, dashboards, and analytics.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

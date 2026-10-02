@@ -1,0 +1,8 @@
+flask
+mysql-connector-python
+scikit-learn
+gensim
+sentence-transformers
+torch
+nltk
+python-dotenv

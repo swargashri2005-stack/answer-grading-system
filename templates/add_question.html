@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Add Question{% endblock %}
+
+{% block content %}
+    <h1>Add a New Question</h1>
+
+    <form method="POST" action="{{ url_for('add_question') }}">
+        <label for="question_text">Question:</label><br>
+        <textarea id="question_text" name="question_text" rows="4" cols="50" required></textarea><br><br>
+
+        <label for="max_marks">Maximum Marks:</label><br>
+        <input type="number" id="max_marks" name="max_marks" step="0.1" min="0" required><br><br>
+
+        <button type="submit">Add Question</button>
+    </form>
+{% endblock %}

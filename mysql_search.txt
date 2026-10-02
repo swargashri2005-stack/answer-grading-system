@@ -1,0 +1,6 @@
+Name                   Id                    Version Source
+------------------------------------------------------------
+MySQL                  Oracle.MySQL          8.4.9   winget
+MySQL Notifier         Oracle.MySQLNotifier  1.1.8   winget
+MySQL Shell            Oracle.MySQLShell     8.4.5   winget
+MySQL Workbench 8.0 CE Oracle.MySQLWorkbench 26.7.0  winget

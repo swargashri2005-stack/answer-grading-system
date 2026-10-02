@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Add Student Answer{% endblock %}
+{% block content %}
+    <h1>Add Student Answer</h1>
+    <form method="POST" action="{{ url_for('add_student_answer') }}">
+        <label>Question:</label><br>
+        <select name="question_id" required>
+            <option value="" disabled selected>-- Select a question --</option>
+            {% for q in questions %}
+                <option value="{{ q.id }}">{{ q.question_text }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label>Student:</label><br>
+        <select name="student_id" required>
+            <option value="" disabled selected>-- Select a student --</option>
+            {% for s in students %}
+                <option value="{{ s.id }}">{{ s.roll_number }} - {{ s.name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label>Answer (leave blank if unanswered):</label><br>
+        <textarea name="answer_text" rows="5" cols="50"></textarea><br><br>
+
+        <button type="submit">Add Student Answer</button>
+    </form>
+{% endblock %}

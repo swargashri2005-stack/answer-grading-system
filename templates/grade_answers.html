@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Run Grading{% endblock %}
+{% block content %}
+    <h1>Run Grading</h1>
+    <form method="POST" action="{{ url_for('grade_answers') }}">
+        <label>Question:</label><br>
+        <select name="question_id" required>
+            <option value="" disabled selected>-- Select a question --</option>
+            {% for q in questions %}
+                <option value="{{ q.id }}">{{ q.question_text }}</option>
+            {% endfor %}
+        </select><br><br>
+        <button type="submit">Run Grading</button>
+    </form>
+{% endblock %}
