@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}Database Dashboard | GradeSense{% endblock %}
+
+{% block content %}
+    <div class="database-header">
+        <div>
+            <h1>🗄️ Database Dashboard</h1>
+            <p class="last-updated">Last Updated: {{ last_updated }}</p>
+        </div>
+        <a class="refresh-button" href="{{ url_for('database_dashboard') }}">🔄 Refresh Database</a>
+    </div>
+
+    <section class="database-summary" aria-label="Database summary">
+        <article class="summary-card">
+            <span class="summary-label">Total Students</span>
+            <strong>{{ students|length }}</strong>
+        </article>
+        <article class="summary-card">
+            <span class="summary-label">Total Questions</span>
+            <strong>{{ questions|length }}</strong>
+        </article>
+        <article class="summary-card">
+            <span class="summary-label">Total Answers</span>
+            <strong>{{ answers|length }}</strong>
+        </article>
+        <article class="summary-card">
+            <span class="summary-label">Total Results</span>
+            <strong>{{ results|length }}</strong>
+        </article>
+    </section>
+
+    <section class="database-section">
+        <h2>Students</h2>
+        {% if students %}
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Roll Number</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                            <tr>
+                                <td>{{ student.id }}</td>
+                                <td>{{ student.roll_number }}</td>
+                                <td>{{ student.name }}</td>
+                                <td>{{ student.category if student.category is not none else "—" }}</td>
+                                <td>{{ student.created_at }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="empty-state">No students found.</p>
+        {% endif %}
+    </section>
+
+    <section class="database-section">
+        <h2>Questions</h2>
+        {% if questions %}
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Question Text</th>
+                            <th>Maximum Marks</th>
+                            <th>Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for question in questions %}
+                            <tr>
+                                <td>{{ question.id }}</td>
+                                <td>{{ question.question_text }}</td>
+                                <td>{{ question.max_marks }}</td>
+                                <td>{{ question.created_at }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="empty-state">No questions found.</p>
+        {% endif %}
+    </section>
+
+    <section class="database-section">
+        <h2>Answers</h2>
+        {% if answers %}
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Question ID</th>
+                            <th>Student ID</th>
+                            <th>Answer Type</th>
+                            <th>Answer Text</th>
+                            <th>Marks Obtained</th>
+                            <th>Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for answer in answers %}
+                            <tr>
+                                <td>{{ answer.id }}</td>
+                                <td>{{ answer.question_id }}</td>
+                                <td>{{ answer.student_id if answer.student_id is not none else "—" }}</td>
+                                <td>{{ answer.answer_type }}</td>
+                                <td class="answer-text">{{ answer.answer_text if answer.answer_text is not none else "—" }}</td>
+                                <td>{{ answer.marks_obtained if answer.marks_obtained is not none else "—" }}</td>
+                                <td>{{ answer.created_at }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="empty-state">No answers found.</p>
+        {% endif %}
+    </section>
+
+    <section class="database-section">
+        <h2>Results</h2>
+        {% if results %}
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            {% for column in results[0].keys() %}
+                                <th>{{ column|replace("_", " ")|title }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in results %}
+                            <tr>
+                                {% for value in result.values() %}
+                                    <td>{{ value if value is not none else "—" }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="empty-state">No results found.</p>
+        {% endif %}
+    </section>
+{% endblock %}

@@ -14,6 +14,7 @@ The application allows users to:
 - Add student answers
 - Grade student answers automatically
 - View grading results
+- View a read-only dashboard of students, questions, answers, and results
 - Store and retrieve data using MySQL
 
 ## 🎯 Objectives
@@ -257,6 +258,14 @@ http://localhost:5000/
 6. Open the grading page.
 7. Run the grading process.
 8. View the calculated score and result.
+
+## 🗄️ Database Dashboard
+
+Open **Database Updates** in the navigation or visit `/database` to review the
+current students, questions, answers, and results stored in MySQL. The page is
+read-only; use **Refresh Database** to reload the latest records. No
+authentication system currently exists in the application, so this dashboard
+is not access-controlled and should only be exposed to trusted users.
 
 ## 🧪 Testing
 

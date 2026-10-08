@@ -218,6 +218,89 @@ button:hover {
     background: #f8fbff;
 }
 
+.database-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.database-header h1 {
+    margin-bottom: 0.35rem;
+}
+
+.last-updated {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.refresh-button {
+    display: inline-block;
+    flex: 0 0 auto;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    box-shadow: 0 12px 20px rgba(29, 78, 216, 0.16);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.refresh-button:hover {
+    background: var(--primary-dark);
+}
+
+.database-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.summary-card {
+    display: grid;
+    gap: 0.55rem;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+}
+
+.summary-label {
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.summary-card strong {
+    color: var(--nav);
+    font-size: 1.8rem;
+}
+
+.database-section {
+    margin-top: 2rem;
+}
+
+.database-section h2 {
+    margin-bottom: 0.5rem;
+}
+
+.empty-state {
+    padding: 1rem;
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    background: #f8fbff;
+}
+
+.answer-text {
+    min-width: 220px;
+    max-width: 480px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
 .grade-badge {
     display: inline-block;
     min-width: 38px;
@@ -304,5 +387,9 @@ button:hover {
 
     .panel {
         padding: 1.2rem;
+    }
+
+    .database-header {
+        flex-direction: column;
     }
 }

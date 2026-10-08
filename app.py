@@ -1,5 +1,8 @@
 import os
+from datetime import datetime
+
 from flask import Flask, render_template, request, redirect, url_for, flash
+from mysql.connector import Error as MySQLError
 from db import execute_query, fetch_one, fetch_all
 from grading_service import grade_question
 
@@ -31,6 +34,58 @@ def home():
 @app.route("/about")
 def about():
     return render_template("about.html")
+
+
+# --------------------------------------------------
+# DATABASE DASHBOARD
+# --------------------------------------------------
+
+@app.route("/database")
+def database_dashboard():
+    # Authentication is not currently implemented; add an admin guard here
+    # if authentication is introduced in the future.
+    try:
+        students = fetch_all(
+            """
+            SELECT id, roll_number, name, category, created_at
+            FROM students
+            ORDER BY created_at DESC
+            """
+        )
+        questions = fetch_all(
+            """
+            SELECT id, question_text, max_marks, created_at
+            FROM questions
+            ORDER BY created_at DESC
+            """
+        )
+        answers = fetch_all(
+            """
+            SELECT id, question_id, student_id, answer_type, answer_text,
+                   marks_obtained, created_at
+            FROM answers
+            ORDER BY created_at DESC
+            """
+        )
+        results = fetch_all(
+            """
+            SELECT *
+            FROM results
+            ORDER BY created_at DESC
+            """
+        )
+    except MySQLError:
+        app.logger.exception("Could not load the database dashboard")
+        return render_template("database_unavailable.html"), 503
+
+    return render_template(
+        "database.html",
+        students=students,
+        questions=questions,
+        answers=answers,
+        results=results,
+        last_updated=datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S %Z"),
+    )
 
 
 # --------------------------------------------------
@@ -134,19 +189,23 @@ def add_reference_answer():
         # student_id = None
         # means NULL in MySQL because this is a reference answer,
         # not a student's answer.
-        execute_query(
-            """
-            INSERT INTO answers
-            (question_id, student_id, answer_type, answer_text)
-            VALUES (%s, %s, %s, %s)
-            """,
-            (
-                question_id,
-                None,
-                "reference",
-                answer_text
+        try:
+            execute_query(
+                """
+                INSERT INTO answers
+                (question_id, student_id, answer_type, answer_text)
+                VALUES (%s, %s, %s, %s)
+                """,
+                (
+                    question_id,
+                    None,
+                    "reference",
+                    answer_text
+                )
             )
-        )
+        except MySQLError:
+            app.logger.exception("Could not save the reference answer")
+            return render_template("database_unavailable.html"), 503
 
         # Show success message
         flash("Reference answer added successfully!")
@@ -155,12 +214,16 @@ def add_reference_answer():
         return redirect(url_for("add_reference_answer"))
 
     # Get all questions for the dropdown
-    questions = fetch_all(
-        """
-        SELECT id, question_text
-        FROM questions
-        """
-    )
+    try:
+        questions = fetch_all(
+            """
+            SELECT id, question_text
+            FROM questions
+            """
+        )
+    except MySQLError:
+        app.logger.exception("Could not load questions for reference answers")
+        return render_template("database_unavailable.html"), 503
 
     # Send questions to HTML template
     return render_template(
@@ -194,19 +257,23 @@ def add_student_answer():
         answer_text = answer_text if answer_text else None
 
         # Insert student answer
-        execute_query(
-            """
-            INSERT INTO answers
-            (question_id, student_id, answer_type, answer_text)
-            VALUES (%s, %s, %s, %s)
-            """,
-            (
-                question_id,
-                student_id,
-                "student",
-                answer_text
+        try:
+            execute_query(
+                """
+                INSERT INTO answers
+                (question_id, student_id, answer_type, answer_text)
+                VALUES (%s, %s, %s, %s)
+                """,
+                (
+                    question_id,
+                    student_id,
+                    "student",
+                    answer_text
+                )
             )
-        )
+        except MySQLError:
+            app.logger.exception("Could not save the student answer")
+            return render_template("database_unavailable.html"), 503
 
         # Show success message
         flash("Student answer added successfully!")
@@ -215,20 +282,24 @@ def add_student_answer():
         return redirect(url_for("add_student_answer"))
 
     # Get all questions for dropdown
-    questions = fetch_all(
-        """
-        SELECT id, question_text
-        FROM questions
-        """
-    )
+    try:
+        questions = fetch_all(
+            """
+            SELECT id, question_text
+            FROM questions
+            """
+        )
 
-    # Get all students for dropdown
-    students = fetch_all(
-        """
-        SELECT id, roll_number, name
-        FROM students
-        """
-    )
+        # Get all students for dropdown
+        students = fetch_all(
+            """
+            SELECT id, roll_number, name
+            FROM students
+            """
+        )
+    except MySQLError:
+        app.logger.exception("Could not load data for student answers")
+        return render_template("database_unavailable.html"), 503
 
     # Send both lists to HTML
     return render_template(
@@ -264,6 +335,10 @@ def grade_answers():
             # If grading fails because of a validation problem
             flash(f"Grading failed: {e}")
 
+        except MySQLError:
+            app.logger.exception("Could not grade answers")
+            return render_template("database_unavailable.html"), 503
+
         # Show results page
         return redirect(
             url_for(
@@ -274,12 +349,16 @@ def grade_answers():
 
     # For GET request,
     # get all questions for dropdown.
-    questions = fetch_all(
-        """
-        SELECT id, question_text
-        FROM questions
-        """
-    )
+    try:
+        questions = fetch_all(
+            """
+            SELECT id, question_text
+            FROM questions
+            """
+        )
+    except MySQLError:
+        app.logger.exception("Could not load questions for grading")
+        return render_template("database_unavailable.html"), 503
 
     # Show grading page
     return render_template(
@@ -299,20 +378,24 @@ def grade_results(question_id):
     #
     # JOIN students so that we can display
     # student's roll number and name.
-    results = fetch_all(
-        """
-        SELECT
-            r.*,
-            s.roll_number,
-            s.name
-        FROM results r
-        JOIN students s
-            ON r.student_id = s.id
-        WHERE r.question_id = %s
-        ORDER BY s.name, r.algorithm
-        """,
-        (question_id,)
-    )
+    try:
+        results = fetch_all(
+            """
+            SELECT
+                r.*,
+                s.roll_number,
+                s.name
+            FROM results r
+            JOIN students s
+                ON r.student_id = s.id
+            WHERE r.question_id = %s
+            ORDER BY s.name, r.algorithm
+            """,
+            (question_id,)
+        )
+    except MySQLError:
+        app.logger.exception("Could not load grading results")
+        return render_template("database_unavailable.html"), 503
 
     # Send results to HTML
     return render_template(

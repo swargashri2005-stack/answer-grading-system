@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Database unavailable{% endblock %}
+{% block content %}
+    <h1>Database unavailable</h1>
+    <p>The application cannot reach its MySQL database right now.</p>
+    <p>Check that the database is running and that the <code>DB_HOST</code> setting is correct, then try again.</p>
+{% endblock %}
